@@ -34,4 +34,34 @@ fun main() {
     val jack = Student("jack", 30, "m", 85, listOf("coding", "reed"))
     val students = listOf(jillen, show, yison, jack)
     students.map { it.hobbies }.flatten();
+    fun Son.foo3() {
+        println("foo3")
+    }
+    Son().foo3()
+
+    for (i in 0..10) {
+        println("i-->"+i)
+    }
+}
+
+class Son {
+    fun foo() {
+        println("foo in Class Son")
+    }
+}
+
+class Parent {
+    fun foo() {
+        println("foo in Class Parent")
+    }
+
+    fun Son.foo2() {
+        this.foo()
+        this@Parent.foo()
+    }
+}
+
+object Test {
+
+
 }
