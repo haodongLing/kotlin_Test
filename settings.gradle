@@ -1,2 +1,3 @@
+include ':androiddemo1'
 include ':app'
 rootProject.name='kotlin Test'
