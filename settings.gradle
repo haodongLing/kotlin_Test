@@ -1,3 +1,5 @@
+include ':mvvmcore'
+include ':common'
 include ':androiddemo1'
 include ':app'
 rootProject.name='kotlin Test'

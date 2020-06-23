@@ -1,6 +1,6 @@
 package com.haodong.kotlintest
 
-import java.lang.reflect.ParameterizedType
+import com.haodong.kotlintest.modules.User
 import kotlin.reflect.full.declaredFunctions
 
 /**
