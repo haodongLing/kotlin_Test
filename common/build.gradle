@@ -25,6 +25,7 @@ android {
 
 dependencies {
     api fileTree(dir: "libs", include: ["*.jar"])
+
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android"
@@ -34,7 +35,9 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.1.0'
 
     api "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
-    api  "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewmodel_ktx"
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewmodel_ktx"
+    api "androidx.recyclerview:recyclerview:$recyclerView"
+//    api "androidx.navigation:navigation-ui-ktx$navigation"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -51,6 +54,7 @@ dependencies {
 
     // okhttp 3
     api 'com.squareup.okhttp3:okhttp:4.4.0'
+    api 'com.squareup.okhttp3:logging-interceptor:4.4.0'
     debugImplementation 'com.squareup.okhttp3:logging-interceptor:4.4.0'
 
     api 'com.github.tony19:logback-android-core:1.1.1-6'
