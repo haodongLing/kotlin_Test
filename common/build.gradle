@@ -63,5 +63,18 @@ dependencies {
         exclude group: 'com.google.android', module: 'android'
     }
     api 'org.slf4j:slf4j-api:1.7.21'
+    api "org.jetbrains.anko:anko-commons:$anko_version"
+    api "org.jetbrains.anko:anko-sdk15:$anko_version"
+    api "org.jetbrains.anko:anko-sdk15-listeners:$anko_version"
+    api "org.jetbrains.anko:anko-sdk15-coroutines:$anko_version"
+    api "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+    api "org.jetbrains.anko:anko-appcompat-v7-listeners:$anko_version"
+
+    api 'com.github.tony19:logback-android-core:1.1.1-6'
+    api('com.github.tony19:logback-android-classic:1.1.1-6') {
+        // workaround issue #73
+        exclude group: 'com.google.android', module: 'android'
+    }
+
 
 }

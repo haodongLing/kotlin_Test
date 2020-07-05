@@ -12,12 +12,11 @@ import kotlin.reflect.KProperty
  *
  * version:
  */
-class Preference<T>(
+ public class Preference<T>(
     val context: Context,
     val name: String,
     val default: T,
-    val prefName: String = "default",
-    val commitByApply: Boolean
+    val prefName: String = "default"
 ) :
     ReadWriteProperty<Any?, T> {
 
@@ -43,31 +42,16 @@ class Preference<T>(
         putPreference(findProperName(property), value)
     }
 
-    private fun putPreference(key: String, value: T) {
-
-        if (commitByApply) {
-            with(prefs.edit()) {
-                when (value) {
-                    is Long -> putLong(key, value)
-                    is Int -> putInt(key, value)
-                    is Boolean -> putBoolean(key, value)
-                    is String -> putString(key, value)
-                    else -> throw IllegalArgumentException("Unsupported type.")
-                }
-            }.apply()
-        } else {
-            with(prefs.edit()) {
-                when (value) {
-                    is Long -> putLong(key, value)
-                    is Int -> putInt(key, value)
-                    is Boolean -> putBoolean(key, value)
-                    is String -> putString(key, value)
-                    else -> throw IllegalArgumentException("Unsupported type.")
-                }
-            }.commit()
-        }
-
-
+    private fun putPreference(key: String, value: T){
+        with(prefs.edit()){
+            when(value){
+                is Long -> putLong(key, value)
+                is Int -> putInt(key, value)
+                is Boolean -> putBoolean(key, value)
+                is String -> putString(key, value)
+                else -> throw IllegalArgumentException("Unsupported type.")
+            }
+        }.apply()
     }
 
     private fun findProperName(property: KProperty<*>) = if (name.isEmpty()) property.name else name

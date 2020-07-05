@@ -2,6 +2,7 @@ package com.haodong.practice.kotlin.github.app.network
 
 import com.haodong.practice.common.ensureDir
 import com.haodong.practice.kotlin.github.app.AppContext
+import com.haodong.practice.kotlin.github.app.network.interceptors.AuthInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,19 +19,23 @@ import java.util.concurrent.TimeUnit
  * version:
  **/
 private const val BASE_URL = "https://api.github.com"
-private val cacheFile by lazy{
-    File(AppContext.cacheDir,"webServiceApi").apply { ensureDir() }
+private val cacheFile by lazy {
+    File(AppContext.cacheDir, "webServiceApi").apply { ensureDir() }
 }
 val retrofit by lazy {
     Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .client(OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .cache(Cache(cacheFile, 1024 * 1024 * 10))
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .build()
-            )
+        .client(
+            OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .cache(Cache(cacheFile, 1024 * 1024 * 10))
+                .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor(AuthInterceptor())
+                .build()
+        )
+        .baseUrl(BASE_URL)
+        .build()
 }
