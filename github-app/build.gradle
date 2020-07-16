@@ -2,7 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply from: "./local.gradle"
 
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+    androidExtensions {
+        experimental = true
+    }
+}
 android {
     compileSdkVersion 29
 //    buildToolsVersion "29.0.3"
@@ -13,15 +22,27 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "testUserName", '"' + project.username + '"')
+            buildConfigField "String", "testPassword", '"' + project.password + '"'
+        }
+
         release {
+            buildConfigField "String", "testUserName", '""'
+            buildConfigField "String", "testPassword", '""'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -33,5 +54,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+//    implementation('com.github.ihsanbal:LoggingInterceptor:3.1.0') {
+//        exclude group: 'org.json', module: 'json'
+//    }
+    api('com.github.ihsanbal:LoggingInterceptor:3.1.0') {
+        exclude group: 'org.json', module: 'json'
+    }
+
 
 }

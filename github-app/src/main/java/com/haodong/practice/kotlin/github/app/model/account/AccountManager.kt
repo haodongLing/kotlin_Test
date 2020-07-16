@@ -1,6 +1,5 @@
 package com.haodong.practice.kotlin.github.app.model.account
 
-import android.accounts.AccountsException
 import com.google.gson.Gson
 import com.haodong.practice.kotlin.github.app.network.entities.AuthorizationReq
 import com.haodong.practice.kotlin.github.app.network.entities.AuthorizationRsp
@@ -10,6 +9,7 @@ import com.haodong.practice.kotlin.github.app.network.services.UserService
 import com.haodong.practice.kotlin.github.app.utils.fromJson
 import com.haodong.practice.kotlin.github.app.utils.pref
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 
@@ -61,7 +61,6 @@ object AccountManager {
 
     fun isLoggedIn(): Boolean = token.isNotEmpty()
     fun login() = AuthService.createAuthorization(AuthorizationReq())
-        .observeOn(Schedulers.io())
         .doOnNext { if (it.token.isEmpty()) throw AccountException(it) }
         .retryWhen {
             it.flatMap {
@@ -80,7 +79,8 @@ object AccountManager {
         .map {
             currentUser = it
             notifyLogin(it)
-        }
+        }.observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
 
     fun logout() = AuthService.deleteAuthorization(authId)
         .doOnNext {
@@ -92,6 +92,8 @@ object AccountManager {
             } else {
                 throw HttpException(it)
             }
-        }
+        }.observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+
     class AccountException(val authorizationRsp: AuthorizationRsp) : Exception("Already logged in.")
 }

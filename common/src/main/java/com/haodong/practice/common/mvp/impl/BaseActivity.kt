@@ -20,6 +20,7 @@ abstract class BaseActivity<out P : BasePresenter<BaseActivity<P>>> : AppCompatA
 
     init {
         presenter = createPresenterKt()
+        presenter.view=this
     }
 
     private fun createPresenterKt(): P {

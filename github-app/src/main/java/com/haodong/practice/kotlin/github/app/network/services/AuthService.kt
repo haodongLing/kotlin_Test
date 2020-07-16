@@ -19,10 +19,7 @@ import retrofit2.http.Path
  */
 interface AuthApi {
     @PUT("/authorizations/clients/${Configs.Account.clientId}/{fingerPrint}")
-    fun createAuthorization(
-        @Body req: AuthorizationReq,
-        @Path("fingerPrint") fingerPrint: String = Configs.Account.fingerPrint
-    )
+    fun createAuthorization(@Body req: AuthorizationReq, @Path("fingerPrint") fingerPrint: String = Configs.Account.fingerPrint)
             : Observable<AuthorizationRsp>
 
     @DELETE("/authorizations/{id}")
