@@ -4,9 +4,11 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import com.bennyhuo.common.ext.hideSoftInput
+import com.haodong.practice.common.ErrorHandler
 import com.haodong.practice.common.mvp.impl.BaseActivity
 import com.haodong.practice.common.otherWise
 import com.haodong.practice.common.yes
@@ -45,7 +47,6 @@ class LoginActivity : BaseActivity<LoginPresenter>() {
             }
         }
 
-
     }
 
     private fun showProgress(show: Boolean) {
@@ -78,6 +79,7 @@ class LoginActivity : BaseActivity<LoginPresenter>() {
 
     fun onLoginError(e: Throwable) {
         e.printStackTrace()
+        Log.e("s",ErrorHandler.handle(e).errorMessage)
         showProgress(false)
         toast("登陆失败")
     }

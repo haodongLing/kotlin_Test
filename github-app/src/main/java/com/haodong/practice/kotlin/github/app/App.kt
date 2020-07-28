@@ -18,5 +18,3 @@ class App: MultiDexApplication() {
         super.attachBaseContext(base)
     }
 }
-
-object AppContext: ContextWrapper(INSTANCE)

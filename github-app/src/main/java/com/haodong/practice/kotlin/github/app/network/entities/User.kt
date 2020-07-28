@@ -9,15 +9,6 @@ import kotlinx.android.parcel.Parcelize
  */
 @PoKo
 @Parcelize
-data class BasicUser(
-        var login: String,
-        var avatar_url: String,
-        var html_url: String
-): Parcelable
-
-
-@PoKo
-@Parcelize
 data class User(var login: String,
                 var avatar_url: String,
                 var html_url: String,
