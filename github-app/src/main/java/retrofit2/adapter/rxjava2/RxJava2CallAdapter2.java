@@ -13,61 +13,65 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.retrofit2.adapter.rxjava;
+package retrofit2.adapter.rxjava2;
 
 import java.lang.reflect.Type;
 
 import javax.annotation.Nullable;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.plugins.RxJavaPlugins;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Response;
-import rx.Observable;
-import rx.Observable.OnSubscribe;
-import rx.Scheduler;
 
-final class RxJavaCallAdapter2<R> implements CallAdapter<R, Object> {
+final class RxJava2CallAdapter2<R> implements CallAdapter<R, Object> {
   private final Type responseType;
-  private final @Nullable Scheduler schedulerSubscribeOn;
+  private final @Nullable
+  Scheduler schedulerSubscribeOn;
   private final @Nullable Scheduler schedulerObserveOn;
   private final boolean isAsync;
   private final boolean isResult;
   private final boolean isBody;
+  private final boolean isFlowable;
   private final boolean isSingle;
+  private final boolean isMaybe;
   private final boolean isCompletable;
 
-  RxJavaCallAdapter2(Type responseType, @Nullable Scheduler schedulerSubscribeOn, @Nullable Scheduler schedulerObserveOn, boolean isAsync,
-                     boolean isResult, boolean isBody, boolean isSingle, boolean isCompletable) {
+  RxJava2CallAdapter2(Type responseType, @Nullable Scheduler schedulerSubscribeOn, @Nullable Scheduler schedulerObserveOn, boolean isAsync,
+                      boolean isResult, boolean isBody, boolean isFlowable, boolean isSingle, boolean isMaybe,
+                      boolean isCompletable) {
     this.responseType = responseType;
     this.schedulerSubscribeOn = schedulerSubscribeOn;
     this.schedulerObserveOn = schedulerObserveOn;
     this.isAsync = isAsync;
     this.isResult = isResult;
     this.isBody = isBody;
+    this.isFlowable = isFlowable;
     this.isSingle = isSingle;
+    this.isMaybe = isMaybe;
     this.isCompletable = isCompletable;
   }
 
-  @Override
-  public Type responseType() {
+  @Override public Type responseType() {
     return responseType;
   }
 
-  @Override
-  public Object adapt(Call<R> call) {
-    OnSubscribe<Response<R>> callFunc = isAsync
-        ? new CallEnqueueOnSubscribe<>(call)
-        : new CallExecuteOnSubscribe<>(call);
+  @Override public Object adapt(Call<R> call) {
+    Observable<Response<R>> responseObservable = isAsync
+        ? new CallEnqueueObservable<>(call)
+        : new CallExecuteObservable<>(call);
 
-    OnSubscribe<?> func;
+    Observable<?> observable;
     if (isResult) {
-      func = new ResultOnSubscribe<>(callFunc);
+      observable = new ResultObservable<>(responseObservable);
     } else if (isBody) {
-      func = new BodyOnSubscribe<>(callFunc);
+      observable = new BodyObservable<>(responseObservable);
     } else {
-      func = callFunc;
+      observable = responseObservable;
     }
-    Observable<?> observable = Observable.create(func);
 
     if (schedulerSubscribeOn != null) {
       observable = observable.subscribeOn(schedulerSubscribeOn);
@@ -77,12 +81,18 @@ final class RxJavaCallAdapter2<R> implements CallAdapter<R, Object> {
       observable = observable.observeOn(schedulerObserveOn);
     }
 
+    if (isFlowable) {
+      return observable.toFlowable(BackpressureStrategy.LATEST);
+    }
     if (isSingle) {
-      return observable.toSingle();
+      return observable.singleOrError();
+    }
+    if (isMaybe) {
+      return observable.singleElement();
     }
     if (isCompletable) {
-      return observable.toCompletable();
+      return observable.ignoreElements();
     }
-    return observable;
+    return RxJavaPlugins.onAssembly(observable);
   }
 }

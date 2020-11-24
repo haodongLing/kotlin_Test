@@ -7,7 +7,7 @@ import androidx.multidex.MultiDexApplication
 
 private lateinit var INSTANCE: Application
 
-class App: MultiDexApplication() {
+class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
@@ -18,3 +18,5 @@ class App: MultiDexApplication() {
         super.attachBaseContext(base)
     }
 }
+
+object AppContext : ContextWrapper(INSTANCE)

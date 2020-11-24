@@ -32,6 +32,7 @@ object AccountManager {
     var token by pref("")
     private var userJson by pref("")
 
+
     var currentUser: User? = null
         get() {
             if (field == null && userJson.isNotEmpty()) {
