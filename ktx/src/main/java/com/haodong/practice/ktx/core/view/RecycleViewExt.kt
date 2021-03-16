@@ -1,9 +1,10 @@
-package luyao.util.ktx.ext.view
+package com.haodong.practice.ktx.core.view
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import luyao.util.ktx.ext.dp2px
+import com.haodong.practice.ktx.ext.dp2px
+
 
 /**
  * Created by luyao

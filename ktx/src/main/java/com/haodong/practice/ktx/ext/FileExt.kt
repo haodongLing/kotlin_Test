@@ -1,8 +1,6 @@
 package com.haodong.practice.ktx.ext
 
-import com.haodong.practice.ktx.core.func.getAllSubFile
-import com.haodong.practice.ktx.core.func.getFolderSize
-import com.haodong.practice.ktx.core.func.getFormatFileSize
+import com.haodong.practice.ktx.core.func.*
 import com.haodong.practice.ktx.core.util.getMimeType
 import java.io.File
 import java.nio.charset.Charset

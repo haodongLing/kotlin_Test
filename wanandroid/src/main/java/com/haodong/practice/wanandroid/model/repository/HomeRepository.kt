@@ -1,0 +1,31 @@
+package com.haodong.practice.wanandroid.model.repository
+
+
+import com.haodong.practice.mvvm.core.Result
+import com.haodong.practice.wanandroid.model.api.BaseRepository
+import com.haodong.practice.wanandroid.model.api.WanRetrofitClient
+import com.haodong.practice.wanandroid.model.bean.ArticleList
+import com.haodong.practice.wanandroid.model.bean.Banner
+
+
+/**
+ * Created by luyao
+ * on 2019/4/10 14:09
+ */
+class HomeRepository : BaseRepository() {
+
+    suspend fun getBanners(): Result<List<Banner>> {
+        return safeApiCall(call = {requestBanners()},errorMessage = "")
+    }
+
+    private suspend fun requestBanners(): Result<List<Banner>> =
+        executeResponse(WanRetrofitClient.service.getBanner())
+
+
+    suspend fun getArticleList(page: Int): Result<ArticleList> {
+        return safeApiCall(call = { requestArticleList(page) }, errorMessage = "")
+    }
+
+    private suspend fun requestArticleList(page: Int): Result<ArticleList> =
+            executeResponse(WanRetrofitClient.service.getHomeArticles(page))
+}

@@ -1,6 +1,7 @@
 package com.haodong.practice.ktx.ext
 
 import android.util.Log
+import com.haodong.practice.ktx.BuildConfig
 
 /**
  * Created by luyao
