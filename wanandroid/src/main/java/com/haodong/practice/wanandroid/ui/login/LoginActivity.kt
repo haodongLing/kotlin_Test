@@ -1,11 +1,13 @@
 package com.haodong.practice.wanandroid.ui.login
 
+import android.app.ProgressDialog
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
+import com.haodong.practice.ktx.ext.toast
 import com.haodong.practice.mvvm.core.base.BaseVMActivity
 import com.haodong.practice.wanandroid.BR
 import com.haodong.practice.wanandroid.R
 import com.haodong.practice.wanandroid.model.bean.Title
-import dagger.hilt.android.AndroidEntryPoint
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 /**
@@ -36,6 +38,37 @@ class LoginActivity : BaseVMActivity<LoginViewModel>() {
     }
 
     override fun startObserve() {
-        loginViewModel.apply { }
+        loginViewModel.apply {
+            uiState.observe(this@LoginActivity, Observer {it->
+                if (it.isLoading){
+                    showProgressDialog()
+
+                    it.isSuccess?.let {
+                        dismissProgressDialog()
+                        finish()
+                    }
+
+                    it.isError?.let {
+                        dismissProgressDialog()
+                        toast(it)
+                    }
+                    if (it.needLogin){
+                        loginViewModel.loginFlow()
+                    }
+                }
+            })
+        }
     }
+
+    private var progressDialog: ProgressDialog? = null
+    private fun showProgressDialog() {
+        if (progressDialog == null)
+            progressDialog = ProgressDialog(this)
+        progressDialog?.show()
+    }
+
+    private fun dismissProgressDialog() {
+        progressDialog?.dismiss()
+    }
+
 }

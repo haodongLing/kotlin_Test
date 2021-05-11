@@ -8,6 +8,15 @@ import com.haodong.practice.wanandroid.model.api.WanService
 import com.haodong.practice.wanandroid.model.bean.User
 import com.haodong.practice.wanandroid.util.Preference
 import com.haodong.practice.mvvm.core.Result
+import com.haodong.practice.wanandroid.model.bean.doError
+import com.haodong.practice.wanandroid.model.bean.doSuccess
+import com.haodong.practice.wanandroid.ui.login.LoginUiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,9 +33,33 @@ class LoginRepository @Inject constructor(val service: WanService) : BaseReposit
 
 
     suspend fun login(userName: String, passWord: String): Result<User> {
-        return safeApiCall(call = { requestLogin(userName, passWord) },
-                errorMessage = App.CONTEXT.getString(R.string.about))
+        return safeApiCall(
+            call = { requestLogin(userName, passWord) },
+            errorMessage = App.CONTEXT.getString(R.string.about)
+        )
     }
+
+    @ExperimentalCoroutinesApi
+    suspend fun loginFlow(userName: String, passWord: String) = flow {
+        if (userName.isBlank() || passWord.isBlank()) {
+            emit(LoginUiState(enableLoginButton = false))
+            return@flow
+        }
+        service.login(userName, passWord).doSuccess { user ->
+            isLogin = true
+            userJson = Gson().toJson(user)
+            App.CURRENT_USER = user
+            emit(LoginUiState(isSuccess = user, enableLoginButton = true))
+        }.doError { errorMsg ->
+            emit(LoginUiState<User>(isError = errorMsg, enableLoginButton = true))
+        }
+
+    }.onStart {
+        emit(LoginUiState(isLoading = true))
+    }.flowOn(Dispatchers.IO).catch {
+        emit(LoginUiState(isError = it.message, enableLoginButton = true))
+    }
+
 
     // TODO Move into DataSource Layer ?
     private suspend fun requestLogin(userName: String, passWord: String): Result<User> {
@@ -48,5 +81,21 @@ class LoginRepository @Inject constructor(val service: WanService) : BaseReposit
         val response = service.register(userName, passWord, passWord)
         return executeResponse(response, { requestLogin(userName, passWord) })
     }
+
+    suspend fun registerFlow(username: String, passWord: String) = flow<LoginUiState<User>> {
+        if (username.isBlank() || passWord.isBlank()) {
+            emit(LoginUiState(enableLoginButton = false))
+            return@flow
+        }
+        service.register(username, passWord,passWord).doSuccess {
+            emit(LoginUiState(needLogin = true))
+
+        }.doError { errorMsg ->
+            emit(LoginUiState(isError = errorMsg, enableLoginButton = false))
+        }
+
+    }.onStart {
+        emit(LoginUiState(isLoading = true))
+    }.flowOn(Dispatchers.IO).catch { emit(LoginUiState(isError = it.message, enableLoginButton = true)) }
 
 }

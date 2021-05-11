@@ -10,6 +10,7 @@ import com.haodong.practice.wanandroid.CoroutinesDispatcherProvider
 import com.haodong.practice.wanandroid.checkResult
 import com.haodong.practice.wanandroid.model.bean.User
 import com.haodong.practice.wanandroid.model.repository.LoginRepository
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -51,19 +52,23 @@ class LoginViewModel @ViewModelInject constructor(
         }
     }
 
-    fun resgister() {
-        viewModelScope.launch(provider.computation) {
-            if (userName.get().isNullOrBlank() || passWord.get().isNullOrBlank()) return@launch
-            withContext(provider.main) {
-                _uiState.value = LoginUiState(isLoading = true)
-            }
-            val result = repository.register(userName.get() ?: "", passWord.get() ?: "")
-            result.checkResult(
-                onSuccess = { _uiState.value = LoginUiState(isSuccess = it, enableLoginButton = true) },
-                onError = { _uiState.value = LoginUiState(isError = it, enableLoginButton = true) }
-
-            )
+     fun loginFlow() {
+        launchOnUI {
+            repository.loginFlow(userName.get() ?: "", passWord.get()?:"").collect {
+            _uiState.postValue(it)
+        }
         }
     }
+
+
+    fun register() {
+      launchOnUI {
+          repository.registerFlow(userName.get()?:"",passWord.get()?:"").collect {
+              _uiState.postValue(it)
+          }
+      }
+    }
+    val verifyInput: (String) -> Unit = { loginDataChanged() }
+
 
 }
