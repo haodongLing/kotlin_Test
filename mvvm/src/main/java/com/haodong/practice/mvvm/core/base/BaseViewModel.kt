@@ -1,5 +1,6 @@
 package com.haodong.practice.mvvm.core.base
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
@@ -29,11 +30,14 @@ open class BaseViewModel : ViewModel() {
         var isRefresh: Boolean = false // 刷新
 
     )
-    fun launchOnUI(block:suspend CoroutineScope.()->Unit){
+
+    val mException: MutableLiveData<Throwable> = MutableLiveData()
+    fun launchOnUI(block: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch { block() }
     }
-    suspend fun <T> launchIO(block: suspend CoroutineScope.() -> T){
-        withContext(Dispatchers.IO){
+
+    suspend fun <T> launchIO(block: suspend CoroutineScope.() -> T) {
+        withContext(Dispatchers.IO) {
             block
         }
     }

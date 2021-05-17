@@ -1,7 +1,17 @@
 package com.haodong.practice.wanandroid.ui.square
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
+import com.haodong.practice.mvvm.core.Result
 import com.haodong.practice.mvvm.core.base.BaseViewModel
+import com.haodong.practice.wanandroid.model.bean.ArticleList
+import com.haodong.practice.wanandroid.model.bean.Banner
 import com.haodong.practice.wanandroid.model.repository.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * created by linghaoDo on 3/15/21
@@ -9,11 +19,115 @@ import com.haodong.practice.wanandroid.model.repository.*
  *
  * version:
  */
-//class ArticleViewModel(
-//    private val squareRepository: SquareRepository,
-//    private val homeRepository: HomeRepository,
-//    private val projectRepository: ProjectRepository,
-//    private val collectRepository: CollectRepository,
-//    private val systemRepository: SystemRepository
-//) : BaseViewModel(){
-//}
+class ArticleViewModel(
+    private val squareRepository: SquareRepository,
+    private val homeRepository: HomeRepository,
+    private val projectRepository: ProjectRepository,
+    private val collectRepository: CollectRepository,
+    private val systemRepository: SystemRepository
+) : BaseViewModel() {
+    sealed class ArticleType {
+        object Home : ArticleType() /*首页*/
+        object Square : ArticleType() /*广场*/
+        object LatestProject : ArticleType() /*最新项目*/
+        object ProjectDetailList : ArticleType() /*项目列表*/
+        object Collection : ArticleType() /*收藏*/
+        object SystemType : ArticleType()           // 体系分类
+        object Blog : ArticleType() /*公众号*/
+    }
+
+    private val _uiState = MutableLiveData<ArticleUiModel>()
+    val uiState: LiveData<ArticleUiModel>
+        get() = _uiState
+    private var currentPage = 0;
+    val mBanners: LiveData<List<Banner>> = liveData {
+        kotlin.runCatching {
+            val data = homeRepository.getBanners()
+            if (data is Result.Success) {
+                emit(data.data)
+            }
+        }
+    }
+
+    val refreshSquare: () -> Unit = { getSquareArticleList(true)}
+    val refreshCollect: () -> Unit = { getCollectArticleList(true)}
+    val refreshHome: ()-> Unit = {getHomeArticleList(true)}
+
+    fun getHomeArticleList(isRefresh: Boolean = false) = getArticleList(ArticleType.Home, isRefresh)
+    fun getSquareArticleList(isRefresh: Boolean = false) = getArticleList(ArticleType.Square, isRefresh)
+    fun getLatestProjectList(isRefresh: Boolean = false) = getArticleList(ArticleType.LatestProject, isRefresh)
+    fun getProjectTypeDetailList(isRefresh: Boolean = false, cid: Int) =
+        getArticleList(ArticleType.ProjectDetailList, isRefresh, cid)
+
+    fun getCollectArticleList(isRefresh: Boolean = false) = getArticleList(ArticleType.Collection, isRefresh)
+    fun getSystemTypeArticleList(isRefresh: Boolean = false, cid: Int) =
+        getArticleList(ArticleType.SystemType, isRefresh, cid)
+
+    fun getBlogArticleList(isRefresh: Boolean = false, cid: Int) = getArticleList(ArticleType.Blog, isRefresh, cid)
+
+    fun collectArticle(articleId: Int, boolean: Boolean) {
+        launchOnUI {
+            withContext(Dispatchers.IO) {
+                if (boolean) collectRepository.collectArticle(articleId)
+                else collectRepository.unCollectArticle(articleId)
+            }
+        }
+    }
+
+
+    private fun getArticleList(articleType: ArticleType, isRefresh: Boolean = false, cid: Int = 0) {
+        viewModelScope.launch {
+            emitArticleUIState(showLoading = true)
+            if (isRefresh) {
+                currentPage = if (articleType is ArticleType.ProjectDetailList) 1 else 0
+            }
+            val result = when (articleType) {
+                ArticleType.Home -> {
+                    homeRepository.getArticleList(currentPage)
+
+                }
+                ArticleType.Square -> squareRepository.getSquareArticleList(currentPage)
+                ArticleType.LatestProject -> projectRepository.getLastedProject(currentPage)
+                ArticleType.ProjectDetailList -> projectRepository.getProjectTypeDetailList(currentPage, cid)
+                ArticleType.Collection -> collectRepository.getCollectArticles(currentPage)
+                ArticleType.SystemType -> systemRepository.getSystemTypeDetail(cid, currentPage)
+                ArticleType.Blog -> systemRepository.getBlogArticle(cid, currentPage)
+            }
+
+            if (result is Result.Success) {
+                val articleList = result.data
+                if (articleList.offset >= articleList.total) {
+                    emitArticleUIState(showLoading = false, showEnd = true)
+                    return@launch
+
+                }
+                currentPage++
+                emitArticleUIState(showLoading = false, showSuccess = articleList, isRefresh = isRefresh)
+
+            } else if (result is Result.Error) {
+                emitArticleUIState(showLoading = false, showError = result.exception.message)
+            }
+        }
+    }
+
+    private fun emitArticleUIState(
+        showLoading: Boolean = false,
+        showError: String? = null,
+        showSuccess: ArticleList? = null,
+        showEnd: Boolean = false,
+        isRefresh: Boolean = false,
+        needLogin: Boolean? = null
+    ) {
+        val uiModel = ArticleUiModel(showLoading, showError, showSuccess, showEnd, isRefresh, needLogin)
+    }
+
+    data class ArticleUiModel(
+        val showLoading: Boolean,
+        val showError: String?,
+        val showSuccess: ArticleList?,
+        val showEnd: Boolean, // 加载更多
+        val isRefresh: Boolean, // 刷新
+        val needLogin: Boolean? = null
+    )
+
+}

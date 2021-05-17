@@ -6,6 +6,7 @@ import com.haodong.practice.wanandroid.model.api.WanRetrofitClient
 import com.haodong.practice.wanandroid.model.api.WanService
 import com.haodong.practice.wanandroid.model.repository.LoginRepository
 import com.haodong.practice.wanandroid.ui.login.LoginViewModel
+import com.haodong.practice.wanandroid.ui.square.ArticleViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -16,7 +17,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(),get()) }
-//    viewModel { ArticleViewModel(get(), get(), get(), get(), get()) }
+    viewModel { ArticleViewModel(get(), get(), get(), get(), get()) }
 //    viewModel { SystemViewModel(get(), get()) }
 //    viewModel { NavigationViewModel(get()) }
 //    viewModel { ProjectViewModel(get()) }

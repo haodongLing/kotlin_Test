@@ -7,6 +7,7 @@ import com.haodong.practice.ktx.ext.toast
 import com.haodong.practice.mvvm.core.base.BaseVMActivity
 import com.haodong.practice.wanandroid.BR
 import com.haodong.practice.wanandroid.R
+import com.haodong.practice.wanandroid.databinding.ActivityLoginBinding
 import com.haodong.practice.wanandroid.model.bean.Title
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
@@ -17,15 +18,14 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
  * version:
  */
 //@AndroidEntryPoint
-class LoginActivity : BaseVMActivity<LoginViewModel>() {
+class LoginActivity : BaseVMActivity() {
     private val loginViewModel by viewModels<LoginViewModel>()
     override fun getLayoutId(): Int {
         return R.layout.activity_login
     }
 
-    override fun initVM(): LoginViewModel {
-        return getViewModel()
-    }
+    private val mBinding by binding<ActivityLoginBinding>(R.layout.activity_login)
+
 
     override fun initView() {
         mBinding.run {
@@ -39,8 +39,8 @@ class LoginActivity : BaseVMActivity<LoginViewModel>() {
 
     override fun startObserve() {
         loginViewModel.apply {
-            uiState.observe(this@LoginActivity, Observer {it->
-                if (it.isLoading){
+            uiState.observe(this@LoginActivity, Observer { it ->
+                if (it.isLoading) {
                     showProgressDialog()
 
                     it.isSuccess?.let {
@@ -52,7 +52,7 @@ class LoginActivity : BaseVMActivity<LoginViewModel>() {
                         dismissProgressDialog()
                         toast(it)
                     }
-                    if (it.needLogin){
+                    if (it.needLogin) {
                         loginViewModel.loginFlow()
                     }
                 }

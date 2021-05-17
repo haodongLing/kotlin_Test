@@ -1,14 +1,13 @@
-package com.haodong.practice.wanandroid.ui.collect
+package com.haodong.practice.wanandroid.ui.share
 
 import com.haodong.practice.mvvm.core.base.BaseVMActivity
 
 /**
- * created by linghaoDo on 3/15/21
+ * created by tangyuan on 2021/5/14
  * description:
  *
- * version:
  */
-class MyCollectActivity : BaseVMActivity() {
+class ShareActivity : BaseVMActivity() {
     override fun initView() {
         TODO("Not yet implemented")
     }
@@ -20,4 +19,5 @@ class MyCollectActivity : BaseVMActivity() {
     override fun startObserve() {
         TODO("Not yet implemented")
     }
+
 }
