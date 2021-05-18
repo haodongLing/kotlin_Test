@@ -10,14 +10,11 @@ import com.haodong.practice.mvvm.core.base.BaseVMActivity
  */
 class MyCollectActivity : BaseVMActivity() {
     override fun initView() {
-        TODO("Not yet implemented")
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
     }
 
     override fun startObserve() {
-        TODO("Not yet implemented")
     }
 }

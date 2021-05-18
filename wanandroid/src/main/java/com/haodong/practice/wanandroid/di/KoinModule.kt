@@ -4,7 +4,7 @@ package com.haodong.practice.wanandroid.di
 import com.haodong.practice.wanandroid.CoroutinesDispatcherProvider
 import com.haodong.practice.wanandroid.model.api.WanRetrofitClient
 import com.haodong.practice.wanandroid.model.api.WanService
-import com.haodong.practice.wanandroid.model.repository.LoginRepository
+import com.haodong.practice.wanandroid.model.repository.*
 import com.haodong.practice.wanandroid.ui.login.LoginViewModel
 import com.haodong.practice.wanandroid.ui.square.ArticleViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -29,14 +29,14 @@ val repositoryModule = module {
     single { WanRetrofitClient.getService(WanService::class.java, WanService.BASE_URL) }
     single { CoroutinesDispatcherProvider() }
     single { LoginRepository(get()) }
-//    single { SquareRepository() }
-//    single { HomeRepository() }
-//    single { ProjectRepository() }
-//    single { CollectRepository() }
-//    single { SystemRepository() }
-//    single { NavigationRepository() }
-//    single { SearchRepository() }
-//    single { ShareRepository() }
+    single { SquareRepository() }
+    single { HomeRepository() }
+    single { ProjectRepository() }
+    single { CollectRepository() }
+    single { SystemRepository() }
+    single { NavigationRepository() }
+    single { SearchRepository() }
+    single { ShareRepository() }
 }
 
 val appModule = listOf(viewModelModule, repositoryModule)

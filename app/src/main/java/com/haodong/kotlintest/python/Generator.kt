@@ -17,7 +17,7 @@ class GeneratorImpl<T>(
     private val parameter: T
 ) : Generator<T> {
     override fun interator(): Iterator<T> {
-        TODO("Not yet implemented")
+
     }
 
 

@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import com.haodong.practice.mvvm.core.util.Timer
 import com.haodong.practice.wanandroid.di.appModule
-import dagger.hilt.android.HiltAndroidApp
 import com.haodong.practice.wanandroid.model.bean.User
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -16,7 +15,6 @@ import kotlin.properties.Delegates
  *
  * version:
  */
-@HiltAndroidApp
 class App : Application() {
     companion object {
         var CONTEXT: Context by Delegates.notNull()

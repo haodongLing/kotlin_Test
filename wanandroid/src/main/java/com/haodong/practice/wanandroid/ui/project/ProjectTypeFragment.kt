@@ -45,7 +45,7 @@ class ProjectTypeFragment : BaseVMFragment<FragmentProjecttypeBinding>(R.layout.
     }
 
     private fun initRecyclerView() {
-        TODO("Not yet implemented")
+
     }
 
     override fun initData() {

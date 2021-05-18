@@ -13,14 +13,11 @@ open class ProjectFragment:BaseVMFragment<ActivityProjectBinding>(R.layout.activ
     open var isBlog = false // 区分是公众号还是项目分类
 
     override fun initView() {
-        TODO("Not yet implemented")
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
     }
 
     override fun startObserve() {
-        TODO("Not yet implemented")
     }
 }

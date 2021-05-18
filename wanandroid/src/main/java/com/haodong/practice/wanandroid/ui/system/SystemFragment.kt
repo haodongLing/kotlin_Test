@@ -11,14 +11,14 @@ import com.haodong.practice.wanandroid.databinding.FragmentSystemBinding
  */
 class SystemFragment : BaseVMFragment<FragmentSystemBinding>(R.layout.fragment_system) {
     override fun initView() {
-        TODO("Not yet implemented")
+
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
+
     }
 
     override fun startObserve() {
-        TODO("Not yet implemented")
+
     }
 }

@@ -1,18 +1,14 @@
 package com.haodong.practice.wanandroid.ui.login
 
 import androidx.databinding.ObservableField
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.haodong.practice.mvvm.core.base.BaseViewModel
 import com.haodong.practice.wanandroid.CoroutinesDispatcherProvider
 import com.haodong.practice.wanandroid.checkResult
 import com.haodong.practice.wanandroid.model.bean.User
 import com.haodong.practice.wanandroid.model.repository.LoginRepository
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * created by linghaoDo on 3/16/21
@@ -20,7 +16,7 @@ import kotlinx.coroutines.withContext
  *
  * version:
  */
-class LoginViewModel @ViewModelInject constructor(
+class LoginViewModel  (
     val repository: LoginRepository,
     val provider: CoroutinesDispatcherProvider
 ) : BaseViewModel() {

@@ -29,7 +29,7 @@ class LoginActivity : BaseVMActivity() {
 
     override fun initView() {
         mBinding.run {
-            setVariable(BR.viewModel, loginViewModel)
+            viewModel=loginViewModel
             setVariable(BR.title, Title(R.string.login, R.drawable.arrow_back) { onBackPressed() })
         }
     }

@@ -9,15 +9,15 @@ import com.haodong.practice.mvvm.core.base.BaseVMActivity
  */
 class ShareActivity : BaseVMActivity() {
     override fun initView() {
-        TODO("Not yet implemented")
+
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
+
     }
 
     override fun startObserve() {
-        TODO("Not yet implemented")
+
     }
 
 }

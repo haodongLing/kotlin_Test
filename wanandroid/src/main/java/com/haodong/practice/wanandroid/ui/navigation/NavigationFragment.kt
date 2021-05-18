@@ -11,14 +11,14 @@ import com.haodong.practice.wanandroid.databinding.FragmentNavigationBinding
  */
 class NavigationFragment : BaseVMFragment<FragmentNavigationBinding>(R.layout.fragment_navigation) {
     override fun initView() {
-        TODO("Not yet implemented")
+
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
+
     }
 
     override fun startObserve() {
-        TODO("Not yet implemented")
+
     }
 }

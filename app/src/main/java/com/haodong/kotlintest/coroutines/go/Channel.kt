@@ -39,7 +39,7 @@ class SimpleChannel<T> : Channel<T> {
 
 
     override fun close() {
-        TODO("Not yet implemented")
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

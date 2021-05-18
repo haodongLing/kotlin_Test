@@ -11,14 +11,14 @@ import com.haodong.practice.wanandroid.databinding.FragmentSearchBinding
  */
 class SearchFragment : BaseVMFragment<FragmentSearchBinding>(R.layout.fragment_search) {
     override fun initView() {
-        TODO("Not yet implemented")
+
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
+
     }
 
     override fun startObserve() {
-        TODO("Not yet implemented")
+
     }
 }

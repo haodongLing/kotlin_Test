@@ -1,6 +1,8 @@
 package com.haodong.practice.wanandroid.ui
 
+import android.os.Bundle
 import com.haodong.practice.mvvm.core.base.BaseActivity
+import com.haodong.practice.wanandroid.R
 
 /**
  * created by linghaoDo on 3/17/21
@@ -8,16 +10,20 @@ import com.haodong.practice.mvvm.core.base.BaseActivity
  *
  * version:
  */
-class NavigationActivity :BaseActivity() {
+class NavigationActivity : BaseActivity() {
     override fun initView() {
-        TODO("Not yet implemented")
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
     }
 
     override fun getLayoutId(): Int {
-        TODO("Not yet implemented")
+        return R.layout.activity_navigation
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
+        super.onCreate(savedInstanceState)
+
     }
 }

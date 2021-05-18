@@ -18,15 +18,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by luyao
  * on 2019/4/10 9:42
  */
-@Singleton
-class LoginRepository @Inject constructor(val service: WanService) : BaseRepository() {
+
+class LoginRepository  (val service: WanService) : BaseRepository() {
 
     private var isLogin by Preference(Preference.IS_LOGIN, false)
     private var userJson by Preference(Preference.USER_GSON, "")
@@ -61,7 +59,6 @@ class LoginRepository @Inject constructor(val service: WanService) : BaseReposit
     }
 
 
-    // TODO Move into DataSource Layer ?
     private suspend fun requestLogin(userName: String, passWord: String): Result<User> {
         val response = service.login(userName, passWord)
 

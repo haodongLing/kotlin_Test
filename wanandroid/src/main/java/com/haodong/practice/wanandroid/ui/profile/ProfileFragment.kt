@@ -1,6 +1,7 @@
 package com.haodong.practice.wanandroid.ui.profile
 
 import com.haodong.practice.mvvm.core.base.BaseFragment
+import com.haodong.practice.wanandroid.R
 import com.haodong.practice.wanandroid.util.Preference
 
 /**
@@ -13,14 +14,14 @@ class ProfileFragment : BaseFragment() {
     private var isLogin by Preference(Preference.IS_LOGIN, false)
     private var userJson by Preference(Preference.USER_GSON, "")
     override fun getLayoutResId(): Int {
-        TODO("Not yet implemented")
+        return  R.layout.fragmnet_profile
     }
 
     override fun initView() {
-        TODO("Not yet implemented")
+
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
+
     }
 }
