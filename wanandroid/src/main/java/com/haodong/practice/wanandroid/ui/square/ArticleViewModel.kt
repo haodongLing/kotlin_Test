@@ -49,9 +49,9 @@ class ArticleViewModel(
         }
     }
 
-    val refreshSquare: () -> Unit = { getSquareArticleList(true)}
-    val refreshCollect: () -> Unit = { getCollectArticleList(true)}
-    val refreshHome: ()-> Unit = {getHomeArticleList(true)}
+    val refreshSquare: () -> Unit = { getSquareArticleList(true) }
+    val refreshCollect: () -> Unit = { getCollectArticleList(true) }
+    val refreshHome: () -> Unit = { getHomeArticleList(true) }
 
     fun getHomeArticleList(isRefresh: Boolean = false) = getArticleList(ArticleType.Home, isRefresh)
     fun getSquareArticleList(isRefresh: Boolean = false) = getArticleList(ArticleType.Square, isRefresh)
@@ -119,6 +119,7 @@ class ArticleViewModel(
         needLogin: Boolean? = null
     ) {
         val uiModel = ArticleUiModel(showLoading, showError, showSuccess, showEnd, isRefresh, needLogin)
+        _uiState.value = uiModel;
     }
 
     data class ArticleUiModel(

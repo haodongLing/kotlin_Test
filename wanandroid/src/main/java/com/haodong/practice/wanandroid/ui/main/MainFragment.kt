@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.navigation.Navigation
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.haodong.practice.mvvm.core.base.BaseFragment
 import com.haodong.practice.wanandroid.R
 import com.haodong.practice.wanandroid.ui.home.HomeFragment
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_new_main.*
  *
  */
 class MainFragment : BaseFragment() {
-    private var isLogin by Preference(Preference.IS_LOGIN, false)
+    private var isLogin by Preference(Preference.IS_LOGIN, true)
     private val titleList = arrayOf("首页", "广场", "最新项目", "体系", "导航")
     private val fragmentList = arrayListOf<Fragment>()
     private val homeFragment by lazy { HomeFragment() }
@@ -56,7 +57,25 @@ class MainFragment : BaseFragment() {
 
 
         }
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = titleList[position]
+        }.attach()
     }
+    override fun onResume() {
+        super.onResume()
+        if (mOnPageChangeCallback == null) mOnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                if (position == 1) addFab.show() else addFab.hide()
+            }
+        }
+        mOnPageChangeCallback?.let { viewPager.registerOnPageChangeCallback(it) }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mOnPageChangeCallback?.let { viewPager.unregisterOnPageChangeCallback(it) }
+    }
+
 
     override fun initView() {
         initViewPager()

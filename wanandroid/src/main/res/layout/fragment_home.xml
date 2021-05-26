@@ -4,6 +4,7 @@
 
 
     <data>
+
         <variable
             name="viewModel"
             type="com.haodong.practice.wanandroid.ui.square.ArticleViewModel" />
@@ -15,16 +16,20 @@
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/homeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        binding:isRefresh="@{viewModel.uiState.showLoading}"
+        binding:onRefresh="@{viewModel.refreshHome}">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/homeRecycleView"
+            adapter="@{adapter}"
+            itemBottomPadding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginTop="20dp"
-            itemBottomPadding="10dp"/>
+            binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 

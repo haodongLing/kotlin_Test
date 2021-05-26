@@ -3,9 +3,10 @@
     xmlns:binding="http://schemas.android.com/apk/res-auto">
 
     <data>
-<!--        <variable-->
-<!--            name="viewModel"-->
-<!--            type="com.haodong.practice.wanandroid.ui.system." />-->
+
+        <variable
+            name="viewModel"
+            type="com.haodong.practice.wanandroid.ui.system.SystemViewModel" />
 
         <variable
             name="adapter"
@@ -14,17 +15,18 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/systemRefreshLayout"
+        isRefresh="@{viewModel.uiState.showLoading}"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/systemRecycleView"
+            adapter="@{adapter}"
+            itemBottomPadding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp"
-            adapter="@{adapter}"
-            binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            itemBottomPadding="10dp">
+            binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
         </androidx.recyclerview.widget.RecyclerView>
 

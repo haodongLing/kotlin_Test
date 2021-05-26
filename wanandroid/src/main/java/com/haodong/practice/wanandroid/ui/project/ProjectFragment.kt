@@ -10,6 +10,7 @@ import com.haodong.practice.wanandroid.databinding.ActivityProjectBinding
  *
  */
 open class ProjectFragment:BaseVMFragment<ActivityProjectBinding>(R.layout.activity_project) {
+
     open var isBlog = false // 区分是公众号还是项目分类
 
     override fun initView() {
